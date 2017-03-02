@@ -1,8 +1,22 @@
 <h1>Meetups</h1>
-<!-- I should see the name of each meetup.
-Meetups should be listed alphabetically. -->
 
-<!-- the name of each meetup should be a link to the meetup's show page. -->
+<div class="sign_in">
+  <% if current_user %>
+    <%= "You're now signed in as #{current_user.username}!" %>
+  <% else %>
+    <%= "You've been signed out" %>
+  <% end %>
+</div>
 
-<!-- There should be a link from the meetups index page that takes you to
-the meetups new page. -->
+<ul class="meetups">
+  <% sorted = @events.sort_by { |m| m.name.downcase } %>
+  <% sorted.each do |event| %>
+    <li>
+      <span class="name">Meetup Name: </span><a href="/meetups/<%= event.id %>"><%= "#{event.name}" %></a>
+    </li>
+  <% end %>
+</ul>
+
+<div id="button_align">
+  <button class="new" type="button"><a href="/meetups/new">Create a Meetup!</a></button>
+</div>

@@ -1,6 +1,9 @@
 class Event < ActiveRecord::Base
-  validates :title, presence: true
-  validates :event_details_id, presence: true
-  has_many :event_details
-  has_many :users, through: :attendees 
+  validates :name, presence: true
+  validates :description, presence: true
+  validates :location, presence: true
+  validates :creator, presence: true
+
+  has_many :users, through: :attendees
+  has_many :attendees
 end

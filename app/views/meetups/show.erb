@@ -1,15 +1,39 @@
+<h2><button id="home"><a href="/">Home</button></a></h2>
 <h1>Meetup Details</h1>
- <!-- I should see the name, description, location, and the creator of the meetup. -->
 
-<!-- I should see a list of the members that have joined the meetup -->
-<!-- I should see each member's avatar and username. -->
 
-<!-- There should be a button to join the meetup if I am not signed
- in or if I am signed in, but I am not a member of the meetup. -->
+<div class="details_name"><%= "#{@event.name}" %></div>
+ <ul id="details_ul_style">
+    <div>
+      <p class="details_text">Description:
+        <span class="details_text_color"><%= "#{@event.description}" %></span>
+      </p>
+    </div>
+    <div>
+      <p class="details_text">Location:
+        <span class="details_text_color"><%= "#{@event.location}" %></span>
+      </p>
+    </div>
+    <div>
+      <p class="details_text">Creator:
+        <span class="details_text_color"><%= "#{@event.creator}" %></span>
+      </p>
+    </div>
+    <div>
+      <p class="details_text">Attendees:
+        <% @attendees.each do |attendee| %>
+          <div>
+            <img id="avatar" src="<%= attendee.avatar_url %>" />
+            <span class="details_text_color"><%= " #{attendee.username}" %></span>
+          </div>
+        <% end %>
+      </p>
+    </div>
+ </ul>
 
- <!-- If I am signed in and I click the button, I should see a
- message that says that I have joined the meetup and I should
- be added to the meetup's members list. -->
+<div id="button_align">
+  <form action="/meetups/<%= @event.id %>" method="post" id="form2">
+    <button id="join" type="submit" form="form2" value="Join">Join</button>
+  </form>
 
- <!-- If I am not signed in and I click the button, I should
- see a message which says that I must sign in. -->
+</div>

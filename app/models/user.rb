@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+
+  has_many :events, through: :attendees
+  has_many :attendees
+
   def self.find_or_create_from_omniauth(auth)
     provider = auth.provider
     uid = auth.uid
@@ -9,9 +13,6 @@ class User < ActiveRecord::Base
       user.email = auth.info.email
       user.username = auth.info.name
       user.avatar_url = auth.info.image
-
-      has_many :events, through: :attendees
-      has_many :attendees
     end
   end
 end

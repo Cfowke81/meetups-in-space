@@ -33,5 +33,56 @@ get '/sign_out' do
 end
 
 get '/meetups' do
+  @events = Event.all
+
   erb :'meetups/index'
+end
+
+get '/meetups/new' do
+  if session[:user_id].nil?
+    flash[:notice] = "You must be signed in"
+    redirect "/meetups"
+  end
+  erb :'meetups/new'
+end
+
+get '/meetups/:id' do
+  @event = Event.find(params[:id])
+  @attendees = @event.users
+
+  erb :'meetups/show'
+end
+
+post '/meetups/new' do
+  @event = Event.new({
+    name: params[:name],
+    description: params[:description],
+    location: params[:location],
+    creator: current_user.username
+    })
+  if @event.valid?
+    @event.save
+    flash[:notice] = "Event saved successfully!"
+    redirect "/meetups/#{@event.id}"
+  else
+    flash[:notice] = "All fields must be filled in"
+    redirect "/meetups/new"
+  end
+end
+
+post '/meetups/:id' do
+  if session[:user_id].nil?
+    flash[:notice] = "You must be signed in to join event"
+    redirect "/meetups/#{params[:id]}"
+  elsif
+    @add_attendee = Attendee.new({user_id: session[:user_id], event_id: params[:id]})
+  elsif Attendee.exists?(@add_attendee.user_id)
+    flash[:notice] = "You've already joined this event!"
+    redirect "/meetups/#{params[:id]}"
+  else @add_attendee.valid?
+    @add_attendee.save
+    flash[:notice] = "Successfully added to event!"
+    redirect "/meetups/#{params[:id]}"
+  end
+  erb :'meetups/show'
 end
